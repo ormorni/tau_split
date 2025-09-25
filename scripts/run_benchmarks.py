@@ -7,7 +7,7 @@ import download_data
 BASE = Path(__file__).parent.parent
 MODELS_DIR = BASE / "data" / "models"
 TARGET_EXE = BASE / "target" / "release" / "tausplit.exe"
-ITERATIONS = 10
+ITERATIONS = 5
 "The number of times to compute the time."
 
 
@@ -31,14 +31,14 @@ PARAMETER_SETS = [
         ],
         300,
     ),
-    # ParameterSet(
-    #     "B-cell receptor (high)",
-    #     [
-    #         Path("data/models/B cell antigen receptor signaling/BCR_rxn.txt"),
-    #         Path("data/models/B cell antigen receptor signaling/BCR_pop_high.txt"),
-    #     ],
-    #     0.0009,
-    # ),
+    ParameterSet(
+        "B-cell receptor (high)",
+        [
+            Path("data/models/B cell antigen receptor signaling/BCR_rxn.txt"),
+            Path("data/models/B cell antigen receptor signaling/BCR_pop_high.txt"),
+        ],
+        0.0009,
+    ),
     ParameterSet(
         "FceRI cascade (low)",
         [
@@ -47,18 +47,19 @@ PARAMETER_SETS = [
         ],
         17,
     ),
-    # ParameterSet(
-    #     "FceRI cascade (high)",
-    #     [
-    #         Path("data/models/FceRI/Phosphorylation-Syk_rxn.txt"),
-    #         Path("data/models/FceRI/Phosphorylation-Syk_pop_high.txt"),
-    #     ],
-    #     0.027,
-    # ),
+    ParameterSet(
+        "FceRI cascade (high)",
+        [
+            Path("data/models/FceRI/Phosphorylation-Syk_rxn.txt"),
+            Path("data/models/FceRI/Phosphorylation-Syk_pop_high.txt"),
+        ],
+        0.027,
+    ),
 ]
 
+
 def main():
-    download_data.get_thanh_models()
+    download_data.main()
 
     subprocess.run(["cargo", "build", "--release"])
 
@@ -80,5 +81,6 @@ def main():
                 ],
             )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
