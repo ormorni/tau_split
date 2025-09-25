@@ -17,23 +17,23 @@ name = "tausplit"
 path = "src/main.rs"
 
 [dependencies]
-bon = "*"
-clap = { version = "*", features = ["derive"] }
+bon = "3.6.4"
+clap = { version = "4.5.40", features = ["derive"] }
 clap-cargo = "0.16.0"
-dary_heap = "*"
-derive-new = "*"
-itertools = "*"
-kdam = "*"
-nom = "*"
-num-traits = "*"
-ordered-float = "*"
-rand = "*"
-rand_distr = "*"
-rustc-hash = "*"
-tinyvec = "*"
+dary_heap = "0.3.7"
+derive-new = "0.7.0"
+itertools = "0.14.0"
+kdam = "0.6.3"
+nom = "8.0.0"
+num-traits = "0.2.19"
+ordered-float = "5.0.0"
+rand = "0.9.1"
+rand_distr = "0.5.1"
+rustc-hash = "2.1.1"
+tinyvec = "1.9.0"
 
 [dev-dependencies]
-criterion = "*"
+criterion = "0.7.0"
 
 [[bench]]
 name = "my_benchmark"
