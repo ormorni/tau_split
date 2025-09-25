@@ -2,7 +2,11 @@
 name = "tausplit"
 version = "0.1.0"
 edition = "2021"
-
+readme = "README.md"
+repository = "https://github.com/ormorni/tau_split"
+description = "A chemical reaction network simulator."
+license = "MIT"
+exclude = ["data", "scripts"]
 
 [lib]
 name = "tausplit"

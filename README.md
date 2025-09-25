@@ -1,12 +1,11 @@
 # The Tau-Splitting algorithm
 
-The Tau-Splitting algorithm is an algorithm for the simulation of chemical reaction networks,
-presented in Solan et al. TODO.
+The Tau-Splitting algorithm is an algorithm for the simulation of chemical reaction networks.
 
-The code can be installed with `cargo install tau-split`.
+The code can be installed with `cargo install tausplit`.
 Afterwards, it can be used with
 ```bash
-tau-split {time} {input_file}
+tausplit {time} {input_file}
 ```
 to simulate the chemical reaction network specified in the input file,
 and output a TSV containing the initial and final states of the system.
@@ -22,7 +21,7 @@ Samples the state of the system `count` evenly spaced times. If `time` is 40 and
 --algorithm {algorithm}
 ```
 
-Uses the given algorithm to simulate the system. The currently supported algorithms are `tausplit` and `gillespie`.
+Uses the given algorithm to simulate the system. The currently supported algorithms are `tau-split` and `gillespie`.
 
 ```bash
 --seed
