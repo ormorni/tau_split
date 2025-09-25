@@ -1,5 +1,5 @@
 """
-A script to download the from Thanh et al. (2017).
+A script to download the from Thanh et al. (2017) and Ghosh et al (2021).
 
 While we have made an effort to make sure that the data retrieved is correct,
 we do not own and do not have the rights to it, and do not guarantee its correctness.

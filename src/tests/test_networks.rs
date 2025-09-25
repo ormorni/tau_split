@@ -5,23 +5,24 @@ use rand::{rngs::StdRng, SeedableRng};
 use rustc_hash::FxHashMap;
 
 use crate::{
-    fastspie3::FastGillespie3, fastspie4::FastGillespie4, fastspie5::FastGillespie5, gillespie::Gillespie, parsers::ParseState, tests::chisq::same_categorical_dist, SimulationAlg
+    fastspie3::FastGillespie3, fastspie4::FastGillespie4, fastspie5::FastGillespie5,
+    gillespie::Gillespie, parsers::ParseState, tests::chisq::same_categorical_dist, SimulationAlg,
 };
 
 /// The path to the system:
 ///
 /// A -> \phi
-const DECAY_PATH: &str = "data/models/decay.txt";
+const DECAY_PATH: &str = "data/test_models/decay.txt";
 /// The path to the system:
 ///
 /// \phi -> A
-const SYNTHESIS_PATH: &str = "data/models/synthesis.txt";
+const SYNTHESIS_PATH: &str = "data/test_models/synthesis.txt";
 /// The path to the system:
 ///
 /// A + B -> B + C
 /// B + C -> C + A
 /// C + A -> A + B
-const CONVERSION_CYCLE_PATH: &str = "data/models/cyclic.txt";
+const CONVERSION_CYCLE_PATH: &str = "data/test_models/cyclic.txt";
 
 /// Tests that the chemical reaction network defined by the file in the given path
 /// has the same distribution when simulated by the Gillespie and Tau-Splitting algorithms.
@@ -44,10 +45,11 @@ fn test_network<Alg: SimulationAlg>(path: &Path, n: usize, t: f64) {
     for i in tqdm!(0..n, desc = "Tau Split") {
         let rng = &mut StdRng::seed_from_u64(i as u64);
 
-        let mut tau_split =
-            Alg::new(initial_state.clone(), reactions.clone(), names.clone());
+        let mut tau_split = Alg::new(initial_state.clone(), reactions.clone(), names.clone());
         tau_split.advance(t, rng);
-        *tau_split_samples.entry(tau_split.state().to_owned()).or_default() += 1;
+        *tau_split_samples
+            .entry(tau_split.state().to_owned())
+            .or_default() += 1;
     }
 
     println!("{:?} {:?}", gillespie_samples, tau_split_samples);

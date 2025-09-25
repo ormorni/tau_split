@@ -137,5 +137,5 @@ pub fn same_categorical_dist<K: Hash + Eq + Debug>(
         })
         .sum::<f64>();
     let dof = d1.keys().chain(d2.keys()).unique().count() - 1;
-    chi_squared < CHI_SQUARED_TABLE[dof]
+    chi_squared <= CHI_SQUARED_TABLE[dof]
 }

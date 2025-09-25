@@ -186,6 +186,7 @@ impl ParseState {
         .lines()
         .filter_map(|line| line.ok())
         .filter(|line| !line.trim().starts_with("#"))
+        .filter(|line| !line.trim().is_empty())
         .map(|line| {
             parse_line(&line)
                 .unwrap_or_else(|err| panic!("Failed to parse the line {line} with error {err:?}"))
