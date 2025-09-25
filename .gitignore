@@ -1,0 +1,6 @@
+/target
+Cargo.lock
+.vscode
+data/models
+data/models.zip
+**/__pycache__

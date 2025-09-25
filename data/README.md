@@ -1,0 +1,1 @@
+For the benchmarking scripts to work (Either `cargo bench` or `python run_benchmarks.py`), the models have to be downloaded from `https://www.cosbi.eu/prototypes/rssa`.

@@ -1,0 +1,43 @@
+[package]
+name = "tausplit"
+version = "0.1.0"
+edition = "2021"
+
+
+[lib]
+name = "tausplit"
+path = "src/lib.rs"
+
+[[bin]]
+name = "tausplit"
+path = "src/main.rs"
+
+[dependencies]
+bon = "*"
+clap = { version = "*", features = ["derive"] }
+clap-cargo = "0.16.0"
+dary_heap = "*"
+derive-new = "*"
+itertools = "*"
+kdam = "*"
+nom = "*"
+num-traits = "*"
+ordered-float = "*"
+rand = "*"
+rand_distr = "*"
+rustc-hash = "*"
+tinyvec = "*"
+
+[dev-dependencies]
+criterion = "*"
+
+[[bench]]
+name = "my_benchmark"
+harness = false
+
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+debug = true
