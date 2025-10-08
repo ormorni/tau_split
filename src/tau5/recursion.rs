@@ -4,7 +4,7 @@ use derive_new::new;
 use itertools::Itertools;
 use rand::Rng;
 
-use crate::fastspie5::NO_LISTENER;
+use crate::tau5::NO_LISTENER;
 
 use super::{
     f_reaction::FReaction,

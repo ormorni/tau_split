@@ -1,7 +1,7 @@
 use std::{path::PathBuf, time::SystemTime};
 
 use clap::{command, Parser};
-use tausplit::{Algorithm, FastGillespie3, FastGillespie4, FastGillespie5, FastGillespie6, Gillespie, ParseState, SimulationAlg};
+use tausplit::{Algorithm, TauSplit3, TauSplit4, TauSplit5, TauSplit6, Gillespie, ParseState, SimulationAlg};
 
 use itertools::Itertools;
 use rand::{rng, rngs::SmallRng, Rng, SeedableRng};
@@ -134,8 +134,8 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli) {
 fn run_cli(args: Cli) {
     match args.algorithm {
         Some(Algorithm::Gillespie) => run_with_alg::<Gillespie>(args),
-        Some(Algorithm::TauSplit6) => run_with_alg::<FastGillespie6>(args),
-        None | Some(Algorithm::TauSplit) => run_with_alg::<FastGillespie5>(args),
+        Some(Algorithm::TauSplit6) => run_with_alg::<TauSplit6>(args),
+        None | Some(Algorithm::TauSplit) => run_with_alg::<TauSplit5>(args),
     }
 }
 

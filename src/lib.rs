@@ -3,17 +3,17 @@ use rand::Rng;
 mod gillespie;
 pub use gillespie::Gillespie;
 #[allow(unused)]
-mod fastspie;
+mod tau;
 #[allow(unused)]
-mod fastspie2;
-mod fastspie3;
-pub use fastspie3::FastGillespie3;
-mod fastspie4;
-pub use fastspie4::FastGillespie4;
-mod fastspie5;
-pub use fastspie5::FastGillespie5;
-mod fastspie6;
-pub use fastspie6::FastGillespie6;
+mod tau2;
+mod tau3;
+pub use tau3::TauSplit3;
+mod tau4;
+pub use tau4::TauSplit4;
+mod tau5;
+pub use tau5::TauSplit5;
+mod tau6;
+pub use tau6::TauSplit6;
 mod indexed_vec;
 
 

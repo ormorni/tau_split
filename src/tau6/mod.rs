@@ -29,20 +29,20 @@ impl Display for NodeId {
     }
 }
 
-pub struct FastGillespie6 {
+pub struct TauSplit6 {
     pub reactions: Vec<Reaction>,
     pub state: Vec<i64>,
     pub total_reactions: u64,
     reactant_names: Vec<String>,
 }
 
-impl SimulationAlg for FastGillespie6 {
+impl SimulationAlg for TauSplit6 {
     fn new(
         state: Vec<i64>,
         reactions: Vec<Reaction>,
         reactant_names: Vec<String>,
-    ) -> FastGillespie6 {
-        FastGillespie6 {
+    ) -> TauSplit6 {
+        TauSplit6 {
             state,
             reactions,
             total_reactions: 0,
