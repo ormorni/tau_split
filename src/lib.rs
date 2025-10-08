@@ -12,6 +12,8 @@ mod fastspie4;
 pub use fastspie4::FastGillespie4;
 mod fastspie5;
 pub use fastspie5::FastGillespie5;
+mod fastspie6;
+pub use fastspie6::FastGillespie6;
 mod indexed_vec;
 
 
@@ -44,4 +46,6 @@ pub enum Algorithm {
     /// The Tau-Splitting algorithm.
     #[default]
     TauSplit,
+    /// The new version of the Tau-Splitting algorithm.
+    TauSplit6,
 }
