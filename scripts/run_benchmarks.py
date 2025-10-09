@@ -77,6 +77,8 @@ def main():
                         "--cpu-time",
                         "--seed",
                         str(i),
+                        "--algorithm",
+                        "tau-split6"
                     ]
                 ],
             )

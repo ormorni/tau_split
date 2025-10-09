@@ -1,9 +1,9 @@
 use std::vec;
 
 use derive_new::new;
+use itertools::Itertools;
 use rand::Rng;
-
-
+use rustc_hash::FxHashSet;
 
 use super::{
     f_reaction::FReaction,
@@ -239,11 +239,11 @@ impl<'t> RecursionTree<'t> {
             // The reaction wass destabilized. All dependents must be reactivated.
             if new_events > old_events {
                 for &(component, _) in &reaction.stoichiometry {
-                    let mut inactive_by_output = std::mem::take(&mut self.inactive_by_input[component]);
-                    for reaction in inactive_by_output.drain(..) {
-                        self.full_split(reaction, depth, rng);
+                    let mut inactive_by_input = std::mem::take(&mut self.inactive_by_input[component]);
+                    for reaction in inactive_by_input.drain(..) {
+                        self.full_split(reaction, depth, false, rng);
                     }
-                    self.inactive_by_input[component] = inactive_by_output;
+                    self.inactive_by_input[component] = inactive_by_input;
                 }
             }
 
@@ -266,12 +266,12 @@ impl<'t> RecursionTree<'t> {
                 (false, true) => 
                 {
                     // Since the reaction has become unstable, 
-                    // if it depends on any reaction we have to split it.
+                    // if it depends on any reaction that has events we have to split it.
                     // We first check if the component was stable before, since otherwise there's no harm in it.
                     for comp in reaction.inputs {
                         if self.unstable_dependents[comp.index] == 0 {
                             while let Some(reaction_idx) = self.inactive_by_output[comp.index].pop() {
-                                self.full_split(reaction_idx, depth, rng);
+                                self.full_split(reaction_idx, depth, true, rng);
                             }
                         }
                     }
@@ -300,8 +300,10 @@ impl<'t> RecursionTree<'t> {
             for comp in &reaction.inputs {
                 self.inactive_by_input[comp.index].push(rdata.index());
             }
-            for comp in &reaction.stoichiometry {
-                self.inactive_by_output[comp.0].push(rdata.index());
+            if rdata.has_events() {
+                for comp in &reaction.stoichiometry {
+                    self.inactive_by_output[comp.0].push(rdata.index());
+                }
             }
             self.nodes[depth].inactive_reactions.push(rdata);
         }
@@ -448,14 +450,22 @@ impl<'t> RecursionTree<'t> {
 
 
     /// Splits a stable reaction over all current nodes.
-    pub fn full_split(&mut self, reaction_idx: usize, target_depth: usize, rng: &mut impl Rng) {
+    /// 
+    /// Parameters:
+    /// * `reaction_idx`: The index of the reaction to split.
+    /// * `target_depth`: The current depth. We stop splitting after reaching that depth.
+    /// * `stop_at_zero`: Whether to stop splitting the reaction when the event count reaches zero.
+    pub fn full_split(&mut self, reaction_idx: usize, target_depth: usize, stop_at_zero: bool, rng: &mut impl Rng) {
         let Some((inactive_depth, mut rdata)) = self.remove_inactive(reaction_idx) else {
             return;
         };
         debug_assert!(inactive_depth < target_depth);
         let reaction = &self.reactions[reaction_idx];
 
-        for depth in (inactive_depth + 1)..= target_depth {
+        for depth in (inactive_depth + 1)..target_depth {
+            if stop_at_zero && !rdata.has_events() {
+                break;
+            }
             if self.nodes[depth].is_left {
                 self.nodes[depth].alt_unstable_reactions.push(rdata.split(reaction, rng));
             } else {
@@ -482,25 +492,6 @@ impl<'t> RecursionTree<'t> {
 
         let lower_legal = rdata.low <= lower_product;
         let upper_legal = rdata.high > upper_product;
-
-        let stable = upper_legal && lower_legal;
-
-        stable
-    }
-
-    /// Checks if the reaction is now stable.
-    ///
-    /// A reaction is stable if either:
-    /// * Its event count is independent of the current error
-    /// * There is only one event, and that event brings the input product below the lower bound.
-    pub fn stable_is_stable(&self, rdata: &mut StableReactionData, rng: &mut impl Rng) -> bool {
-        let reaction = &self.reactions[&*rdata];
-        let lower_product = self.state.lower_product(reaction, rdata.has_events());
-        let upper_product = self.state.upper_product(reaction);
-        let lower_legal =
-            (rdata.low <= lower_product) || (rdata.sample_low(reaction, rng) <= lower_product);
-        let upper_legal =
-            (rdata.high > upper_product) || (rdata.sample_high(reaction, rng) > upper_product);
 
         let stable = upper_legal && lower_legal;
 
