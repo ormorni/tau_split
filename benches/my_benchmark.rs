@@ -4,14 +4,17 @@ use std::{hint::black_box, path::Path};
 
 use tausplit::{TauSplit5, ParseState, SimulationAlg, DEFAULT_SEED};
 
-const BCR_HIGH_PATH: &str = "data/models/B cell antigen receptor signaling/BCR_high.txt";
+const BCR_HIGH_PATH: &str = "data/models/B cell antigen receptor signaling/BCR_pop_high.txt";
+const BCR_RXN_PATH: &str = "data/models/B cell antigen receptor signaling/BCR_rxn.txt";
 const BCR_HIGH_TIME: f64 = 0.0009;
-const FCERI_HIGH_PATH: &str = "data/models/FceRI/FceRI_high.txt";
+const FCERI_HIGH_PATH: &str = "data/models/FceRI/Phosphorylation-Syk_pop_high.txt";
+const FCERI_RXN_PATH: &str = "data/models/FceRI/Phosphorylation-Syk_rxn.txt";
 const FCERI_HIGH_TIME: f64 = 0.027;
 
 fn criterion_benchmark(c: &mut Criterion) {
     let mut parse_state = ParseState::default();
     parse_state.parse_data_file(Path::new(BCR_HIGH_PATH));
+    parse_state.parse_data_file(Path::new(BCR_RXN_PATH));
     let (initial_state, reactions, names) = parse_state.get_network();
 
     c.bench_function("BCR high", |b| {
@@ -25,6 +28,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     let mut parse_state = ParseState::default();
     parse_state.parse_data_file(Path::new(FCERI_HIGH_PATH));
+    parse_state.parse_data_file(Path::new(FCERI_RXN_PATH));
     let (initial_state, reactions, names) = parse_state.get_network();
 
     c.bench_function("FceRI high", |b| {

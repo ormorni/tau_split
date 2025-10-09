@@ -255,6 +255,7 @@ impl<'t> RecursionTree<'t> {
     /// Goes over the reactions, and updates their stability in the stable-dependents.
     fn update_stability(&mut self, depth: usize, rng: &mut impl Rng) {
         let mut idx = 0;
+
         while idx < self.nodes[depth].active_reactions.len() {
             let rdata = &self.nodes[depth].active_reactions[idx];
             let rdata_idx = rdata.index();
@@ -282,6 +283,7 @@ impl<'t> RecursionTree<'t> {
             }
             self.is_stable[rdata_idx] = is_stable;
         }
+
     }
 
     /// Goes over the unstable reactions and transforms those that are stable into StableReactionData.
@@ -307,7 +309,7 @@ impl<'t> RecursionTree<'t> {
             }
             self.nodes[depth].inactive_reactions.push(rdata);
         }
-        
+
         self.nodes[depth].active_reactions = active_reactions;
         self.can_deactivate = can_deactivate;
     }
