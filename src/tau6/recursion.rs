@@ -1,15 +1,13 @@
 use std::vec;
 
 use derive_new::new;
-use itertools::Itertools;
 use rand::Rng;
-use rustc_hash::FxHashSet;
 
 use super::{
     f_reaction::FReaction,
     reaction_data::TauData,
     unstable_dependents::UnstableDependents,
-    ReactionData, StableReactionData, StateData,
+    ReactionData, StateData,
 };
 
 /// Reactions can be stored as unstable or inactive.
@@ -327,19 +325,6 @@ impl<'t> RecursionTree<'t> {
         self.is_stable[rdata.index()] && (no_events || dependents_are_stable)
     }
 
-    /// Checks that the dependent unstable reaction counter is valid.
-    fn validate_dependent(&self, depth: usize) {
-        if cfg!(debug_assertions) {
-            let mut dependents = UnstableDependents::empty(self.state.len());
-
-            for rdata in &self.nodes[depth].active_reactions {
-                if !self.is_stable[rdata.index()] {
-                    dependents.add_unstable(&self.reactions[rdata]);
-                }
-            }
-            debug_assert_eq!(dependents, self.unstable_dependents);
-        }
-    }
 
     /// Validates that all points in the stable index point at nodes where the reaction is stored.
     fn validate_inactive_index(&self) {
@@ -548,43 +533,43 @@ impl<'t> RecursionTree<'t> {
         println!(")");
     }
 
-    fn print_stable_rdata(&self, rdata: &StableReactionData) {
-        print!("SR(inp = ");
-        for (inp_idx, inp) in self.reactions[rdata].inputs.iter().enumerate() {
-            if inp_idx != 0 {
-                print!(" + ");
-            }
-            if inp.count != 1 {
-                print!("{}", inp.count);
-            }
-            print!(
-                "{} ({})",
-                self.reactant_names[inp.index],
-                self.state()[inp.index]
-            );
-        }
-        print!(", stoi = ");
-        for (idx, (index, count)) in self.reactions[rdata]
-            .stoichiometry
-            .iter()
-            .copied()
-            .enumerate()
-        {
-            if idx != 0 {
-                print!(" + ");
-            }
-            if count == 1 {
-            } else if count == -1 {
-                print!("-");
-            } else {
-                print!("{}", count);
-            }
-            print!("{} ({})", self.reactant_names[index], self.state()[index]);
-        }
-        print!(", events={}", rdata.events);
-        print!(", low={}", rdata.low);
-        print!(", high={}", rdata.high);
+    // fn print_stable_rdata(&self, rdata: &StableReactionData) {
+    //     print!("SR(inp = ");
+    //     for (inp_idx, inp) in self.reactions[rdata].inputs.iter().enumerate() {
+    //         if inp_idx != 0 {
+    //             print!(" + ");
+    //         }
+    //         if inp.count != 1 {
+    //             print!("{}", inp.count);
+    //         }
+    //         print!(
+    //             "{} ({})",
+    //             self.reactant_names[inp.index],
+    //             self.state()[inp.index]
+    //         );
+    //     }
+    //     print!(", stoi = ");
+    //     for (idx, (index, count)) in self.reactions[rdata]
+    //         .stoichiometry
+    //         .iter()
+    //         .copied()
+    //         .enumerate()
+    //     {
+    //         if idx != 0 {
+    //             print!(" + ");
+    //         }
+    //         if count == 1 {
+    //         } else if count == -1 {
+    //             print!("-");
+    //         } else {
+    //             print!("{}", count);
+    //         }
+    //         print!("{} ({})", self.reactant_names[index], self.state()[index]);
+    //     }
+    //     print!(", events={}", rdata.events);
+    //     print!(", low={}", rdata.low);
+    //     print!(", high={}", rdata.high);
 
-        println!(")");
-    }
+    //     println!(")");
+    // }
 }

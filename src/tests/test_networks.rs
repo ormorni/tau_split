@@ -5,7 +5,7 @@ use rand::{rngs::StdRng, SeedableRng};
 use rustc_hash::FxHashMap;
 
 use crate::{
-    tau3::TauSplit3, tau4::TauSplit4, tau5::TauSplit5, gillespie::Gillespie, parsers::ParseState, tests::chisq::same_categorical_dist, TauSplit6, SimulationAlg
+    tau5::TauSplit5, gillespie::Gillespie, parsers::ParseState, tests::chisq::same_categorical_dist, TauSplit6, SimulationAlg
 };
 
 /// The path to the system:
@@ -62,24 +62,6 @@ fn test_network<Alg: SimulationAlg>(path: &Path, n: usize, t: f64) {
 ///
 /// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
 #[test]
-pub fn test_synthesis_3() {
-    test_network::<TauSplit3>(Path::new(SYNTHESIS_PATH), 1 << 16, 0.1);
-}
-/// Tests that the system:
-///
-/// \phi -> A
-///
-/// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
-#[test]
-pub fn test_synthesis_4() {
-    test_network::<TauSplit4>(Path::new(SYNTHESIS_PATH), 1 << 16, 0.1);
-}
-/// Tests that the system:
-///
-/// \phi -> A
-///
-/// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
-#[test]
 pub fn test_synthesis_5() {
     test_network::<TauSplit5>(Path::new(SYNTHESIS_PATH), 1 << 16, 0.1);
 }
@@ -91,24 +73,6 @@ pub fn test_synthesis_5() {
 #[test]
 pub fn test_synthesis_6() {
     test_network::<TauSplit6>(Path::new(SYNTHESIS_PATH), 1 << 16, 0.1);
-}
-/// Tests that the system:
-///
-/// A -> \phi
-///
-/// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
-#[test]
-pub fn test_decay_3() {
-    test_network::<TauSplit3>(Path::new(DECAY_PATH), 1 << 16, 0.1);
-}
-/// Tests that the system:
-///
-/// A -> \phi
-///
-/// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
-#[test]
-pub fn test_decay_4() {
-    test_network::<TauSplit4>(Path::new(DECAY_PATH), 1 << 16, 0.1);
 }
 /// Tests that the system:
 ///
@@ -129,28 +93,6 @@ pub fn test_decay_6() {
     test_network::<TauSplit6>(Path::new(DECAY_PATH), 1 << 16, 0.1);
 }
 
-/// Tests that the system:
-///
-/// A + B -> B + C
-/// B + C -> C + A
-/// C + A -> A + B
-///
-/// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
-#[test]
-pub fn test_conversion_cycle_3() {
-    test_network::<TauSplit3>(Path::new(CONVERSION_CYCLE_PATH), 1 << 16, 5.);
-}
-/// Tests that the system:
-///
-/// A + B -> B + C
-/// B + C -> C + A
-/// C + A -> A + B
-///
-/// behaves the same using the Gillespie algorithm and the Tau-Splitting algorithm.
-#[test]
-pub fn test_conversion_cycle_4() {
-    test_network::<TauSplit4>(Path::new(CONVERSION_CYCLE_PATH), 1 << 16, 5.);
-}
 
 /// Tests that the system:
 ///

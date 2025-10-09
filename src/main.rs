@@ -1,7 +1,7 @@
 use std::{path::PathBuf, time::SystemTime};
 
 use clap::{command, Parser};
-use tausplit::{Algorithm, TauSplit3, TauSplit4, TauSplit5, TauSplit6, Gillespie, ParseState, SimulationAlg};
+use tausplit::{Algorithm, TauSplit5, TauSplit6, Gillespie, ParseState, SimulationAlg};
 
 use itertools::Itertools;
 use rand::{rng, rngs::SmallRng, Rng, SeedableRng};

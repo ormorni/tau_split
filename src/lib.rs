@@ -2,14 +2,6 @@ use rand::Rng;
 
 mod gillespie;
 pub use gillespie::Gillespie;
-#[allow(unused)]
-mod tau;
-#[allow(unused)]
-mod tau2;
-mod tau3;
-pub use tau3::TauSplit3;
-mod tau4;
-pub use tau4::TauSplit4;
 mod tau5;
 pub use tau5::TauSplit5;
 mod tau6;

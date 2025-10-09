@@ -100,6 +100,7 @@ impl StateData {
     }
 
     /// Returns the number of reactants contained in the state.
+    #[allow(unused)]
     pub fn len(&self) -> usize {
         self.state.len()
     }

@@ -8,26 +8,13 @@ mod unstable_dependents;
 use f_reaction::FReaction;
 use itertools::Itertools;
 use rand::Rng;
-use reaction_data::{ReactionData, StableReactionData};
+use reaction_data::{ReactionData};
 use recursion::RecursionTree;
 use state_data::StateData;
-use std::fmt::{Debug, Display};
 
 use crate::{reaction::Reaction, SimulationAlg};
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
-struct NodeId(usize);
 
-impl Debug for NodeId {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("NodeId(0b{:b})", self.0))
-    }
-}
-impl Display for NodeId {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("ID({:b})", self.0))
-    }
-}
 
 pub struct TauSplit6 {
     pub reactions: Vec<Reaction>,
@@ -73,4 +60,3 @@ impl SimulationAlg for TauSplit6 {
     }
 }
 
-const NO_LISTENER: (usize, NodeId) = (usize::MAX, NodeId(usize::MAX));

@@ -5,7 +5,7 @@ use tinyvec::ArrayVec;
 
 use crate::reaction::{binomial, Reaction};
 
-use super::reaction_data::{ReactionData, StableReactionData};
+use super::reaction_data::{ReactionData};
 
 /// A struct holding the input of a reaction.
 #[derive(Default, Clone, Copy, PartialEq, Eq, Debug, new)]
@@ -96,15 +96,15 @@ impl<'t> IndexMut<&'t ReactionData> for [FReaction] {
     }
 }
 
-impl<'t> Index<&'t StableReactionData> for [FReaction] {
-    type Output = FReaction;
+// impl<'t> Index<&'t StableReactionData> for [FReaction] {
+//     type Output = FReaction;
 
-    fn index(&self, index: &StableReactionData) -> &Self::Output {
-        self.index(index.reaction)
-    }
-}
-impl<'t> IndexMut<&'t StableReactionData> for [FReaction] {
-    fn index_mut(&mut self, index: &'t StableReactionData) -> &mut Self::Output {
-        self.index_mut(index.reaction)
-    }
-}
+//     fn index(&self, index: &StableReactionData) -> &Self::Output {
+//         self.index(index.reaction)
+//     }
+// }
+// impl<'t> IndexMut<&'t StableReactionData> for [FReaction] {
+//     fn index_mut(&mut self, index: &'t StableReactionData) -> &mut Self::Output {
+//         self.index_mut(index.reaction)
+//     }
+// }
