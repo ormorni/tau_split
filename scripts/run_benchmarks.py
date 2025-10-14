@@ -7,7 +7,7 @@ import download_data
 BASE = Path(__file__).parent.parent
 MODELS_DIR = BASE / "data" / "models"
 TARGET_EXE = BASE / "target" / "release" / "tausplit.exe"
-ITERATIONS = 5
+ITERATIONS = 30
 "The number of times to compute the time."
 
 
@@ -23,14 +23,14 @@ class ParameterSet:
 
 
 PARAMETER_SETS = [
-    ParameterSet(
-        "B-cell receptor (low)",
-        [
-            Path("data/models/B cell antigen receptor signaling/BCR_rxn.txt"),
-            Path("data/models/B cell antigen receptor signaling/BCR_pop.txt"),
-        ],
-        300,
-    ),
+    # ParameterSet(
+    #     "B-cell receptor (low)",
+    #     [
+    #         Path("data/models/B cell antigen receptor signaling/BCR_rxn.txt"),
+    #         Path("data/models/B cell antigen receptor signaling/BCR_pop.txt"),
+    #     ],
+    #     300,
+    # ),
     ParameterSet(
         "B-cell receptor (high)",
         [
@@ -39,14 +39,14 @@ PARAMETER_SETS = [
         ],
         0.0009,
     ),
-    ParameterSet(
-        "FceRI cascade (low)",
-        [
-            Path("data/models/FceRI/Phosphorylation-Syk_rxn.txt"),
-            Path("data/models/FceRI/Phosphorylation-Syk_pop.txt"),
-        ],
-        17,
-    ),
+    # ParameterSet(
+    #     "FceRI cascade (low)",
+    #     [
+    #         Path("data/models/FceRI/Phosphorylation-Syk_rxn.txt"),
+    #         Path("data/models/FceRI/Phosphorylation-Syk_pop.txt"),
+    #     ],
+    #     17,
+    # ),
     ParameterSet(
         "FceRI cascade (high)",
         [
@@ -77,8 +77,6 @@ def main():
                         "--cpu-time",
                         "--seed",
                         str(i),
-                        "--algorithm",
-                        "tau-split6"
                     ]
                 ],
             )
