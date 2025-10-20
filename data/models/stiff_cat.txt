@@ -1,0 +1,10 @@
+# The model follows the description in "Stiffness in stochastic chemically reacting systems: The implicit tau-leaping method" by Rathinam et al (2003).
+
+S1 = 10000
+S2 = 100
+S3 = 10000
+S4 = 0
+
+S1 -> S3, 100000
+S3 -> S1, 100000
+S1 + S2 -> S1 + S4, 0.0005
