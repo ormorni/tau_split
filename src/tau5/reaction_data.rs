@@ -82,6 +82,7 @@ impl ReactionData {
 
     /// Creates a StableReactionData from the normal ReactionData.
     pub fn stabilize(self) -> StableReactionData {
+        // println!("{}", self.events);  // Used for figure generation.
         StableReactionData::new(
             self.reaction,
             self.time,

@@ -23,14 +23,6 @@ class ParameterSet:
 
 
 PARAMETER_SETS = [
-    # ParameterSet(
-    #     "B-cell receptor (low)",
-    #     [
-    #         Path("data/models/B cell antigen receptor signaling/BCR_rxn.txt"),
-    #         Path("data/models/B cell antigen receptor signaling/BCR_pop.txt"),
-    #     ],
-    #     300,
-    # ),
     ParameterSet(
         "B-cell receptor (high)",
         [
@@ -39,14 +31,6 @@ PARAMETER_SETS = [
         ],
         0.0009,
     ),
-    # ParameterSet(
-    #     "FceRI cascade (low)",
-    #     [
-    #         Path("data/models/FceRI/Phosphorylation-Syk_rxn.txt"),
-    #         Path("data/models/FceRI/Phosphorylation-Syk_pop.txt"),
-    #     ],
-    #     17,
-    # ),
     ParameterSet(
         "FceRI cascade (high)",
         [
@@ -54,6 +38,13 @@ PARAMETER_SETS = [
             Path("data/models/FceRI/Phosphorylation-Syk_pop_high.txt"),
         ],
         0.027,
+    ),
+    ParameterSet(
+        "Stiff catalyst",
+        [
+            Path("data/models/stiff_cat.txt"),
+        ],
+        0.0051,
     ),
 ]
 
