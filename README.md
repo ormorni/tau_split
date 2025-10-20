@@ -2,12 +2,14 @@
 
 The Tau-Splitting algorithm is an algorithm for the simulation of chemical reaction networks.
 
-The code can be installed with `cargo install tausplit`.
-Afterwards, it can be used with
+The code is implemented using the Rust programming language, which can be installed from the [official website](https://rust-lang.org/).
+After Rust is installed, the Tau-Split algorithm can be installed by typing `cargo install tausplit` in the command line.
+Afterwards, it can be used from the command line using
+
 ```bash
 tausplit {time} {input_file}
 ```
-to simulate the chemical reaction network specified in the input file,
+to simulate the chemical reaction network specified in the input file for the specified time period,
 and output a TSV containing the initial and final states of the system.
 
 ## Options
@@ -15,16 +17,16 @@ and output a TSV containing the initial and final states of the system.
 ```bash
 -s {count}, --samples {count}
 ```
-Samples the state of the system `count` evenly spaced times. If `time` is 40 and `count` is 4, the algorithm will sample the system at 10, 20, 30, and 40.
+Samples the state of the system `count` evenly spaced times. If `time` is 40 and `count` is 4, the algorithm will sample the system at 10, 20, 30, and 40 and output the states at those times in the TSV.
 
 ```bash
 --algorithm {algorithm}
 ```
 
-Uses the given algorithm to simulate the system. The currently supported algorithms are `tau-split` and `gillespie`.
+Uses the given algorithm to simulate the system. The currently supported algorithms are `tau-split`, `tau-split6`, and `gillespie`. The default algorithm is `tau-split`, which is an optimized version of the algorithm described in the manuscript.
 
 ```bash
---seed
+--seed {seed}
 ```
 
 Uses the given seed for random number generation during the algorithm's run.

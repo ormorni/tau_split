@@ -35,9 +35,9 @@ pub trait SimulationAlg {
 pub enum Algorithm {
     /// The Gillespie algorithm.
     Gillespie,
-    /// The Tau-Splitting algorithm.
+    /// The optimized Tau-Splitting algorithm.
     #[default]
     TauSplit,
-    /// The new version of the Tau-Splitting algorithm.
+    /// The version of the Tau-Splitting algorithm described in the manuscript, with no furhter optimizations.
     TauSplit6,
 }
