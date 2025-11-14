@@ -5,6 +5,9 @@ The Tau-Splitting algorithm is an algorithm for the simulation of chemical react
 ## Installation
 
 Executables for Windows and Linux are available in the Releases section of the GitHub repository.
+Alternatively, to compile the progrm from the source code, first install the Rust programming language, which can be installed from the [official website](https://rust-lang.org/).
+After Rust is installed, the Tau-Split algorithm can be installed by typing `cargo install tausplit` in the command line, or by cloning the repository and running `cargo install --path .` in the repository directory.
+
 Once the executable is downloaded, open the command line in the directory where the executable was downloaded. 
 The basic usage is
 ```bash
@@ -19,9 +22,6 @@ Future examples will use the Linux syntax.
 
 The command simulates the chemical reaction network specified in the input file for the specified time period,
 and output a TSV containing the initial and final states of the system.
-
-To compile the progrm from the source code, first install the Rust programming language, which can be installed from the [official website](https://rust-lang.org/).
-After Rust is installed, the Tau-Split algorithm can be installed by typing `cargo install tausplit` in the command line, or by cloning the repository and running `cargo install --path .` in the repository directory.
 
 Afterwards, it can be used from the command line using
 ```bash
