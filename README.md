@@ -27,6 +27,8 @@ Afterwards, it can be used from the command line using
 ```bash
 tausplit {time} {input_file}
 ```
+which will output a TSV, with one column for the sample time and one column for each molecular species, and one row for each sampled time point.
+Every cell contains the number of molecules from the given molecular species at the sampled time.
 
 ### Example files
 
