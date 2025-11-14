@@ -33,7 +33,7 @@ tausplit {time} {input_file}
 Example files for chemical reaction networks can be found in the `data/test_models` directory.
 More examples for chemical reaction networks, including the B-cell receptor network and the FceRI network, can be downloaded from `https://www.cosbi.eu/prototypes/rssa`, under "Collection of models".
 
-An example command to run the models from the repository root directory is:
+If the example file `synthesis.txt` is placed in the same directory as the `tausplit` executable, the network can be simulated for 5 seconds using 
 ```
 tausplit 5 .\data\test_models\synthesis.txt
 ```
