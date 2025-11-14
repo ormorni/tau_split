@@ -80,3 +80,13 @@ Rows of the format `A + B -> C + 3D, 3.5` define the chemical reaction in which 
 The reaction network can be split across any number of files, allowing using the same chemical reaction network with different initial states.
 
 Lines starting with `#` are treated as comments, and are not parsed.
+
+## Example files
+
+Example files for chemical reaction networks can be found in the `data/test_models` directory.
+More examples for chemical reaction networks, including the B-cell receptor network and the FceRI network, can be downloaded from `https://www.cosbi.eu/prototypes/rssa`, under "Collection of models".
+
+An example command to run the models from the repositroy root directory is:
+```
+tausplit 5 .\data\test_models\synthesis.txt
+```
