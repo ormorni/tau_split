@@ -35,7 +35,7 @@ More examples for chemical reaction networks, including the B-cell receptor netw
 
 If the example file `synthesis.txt` is placed in the same directory as the `tausplit` executable, the network can be simulated for 5 seconds using 
 ```
-tausplit 5 .\data\test_models\synthesis.txt
+tausplit 5 synthesis.txt
 ```
 
 
