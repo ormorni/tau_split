@@ -30,14 +30,13 @@ tausplit {time} {input_file}
 
 ### Example files
 
-Example files for chemical reaction networks can be found in the `data/test_models` directory.
+Example files for chemical reaction networks can be found in the `data/test_models` directory of the GitHub repository.
 More examples for chemical reaction networks, including the B-cell receptor network and the FceRI network, can be downloaded from `https://www.cosbi.eu/prototypes/rssa`, under "Collection of models".
 
-If the example file `synthesis.txt` is placed in the same directory as the `tausplit` executable, the network can be simulated for 5 seconds using 
+If the example file `synthesis.txt` is placed in the same directory as the `tausplit` executable, the progress of the network over a period of 5 seconds can be simulated using 
 ```
 tausplit 5 synthesis.txt
 ```
-
 
 ## Options
 
