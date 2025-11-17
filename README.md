@@ -17,7 +17,7 @@ if the Windows executable was downloaded, or
 ```bash
 tausplit {time} {input_file}
 ```
-if the Linux executable was downloaded.
+if the Linux executable was downloaded, or if the program was downloaded using `cargo install tausplit`.
 Future examples will use the Linux syntax.
 
 The command simulates the chemical reaction network specified in the input file for the specified time period,
