@@ -19,7 +19,6 @@ use std::{
     io::{BufRead, BufReader},
     path::Path,
 };
-use tinyvec::ArrayVec;
 
 /// The result of parsing a line defining a new reaction.
 #[derive(Clone, Debug)]
