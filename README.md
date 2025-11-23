@@ -5,24 +5,34 @@ The Tau-Splitting algorithm is an algorithm for the simulation of chemical react
 ## Installation
 
 Executables for Windows and Linux are available in the Releases section of the GitHub repository.
-If the executables are installed, they can be run from the command line using
+Alternatively, to compile the progrm from the source code, first install the Rust programming language, which can be installed from the [official website](https://rust-lang.org/).
+After Rust is installed, the Tau-Split algorithm can be installed by typing `cargo install tausplit` in the command line, or by cloning the repository and running `cargo install --path .` in the repository directory.
+
+Once the executable is downloaded, open the command line in the directory where the executable was downloaded. 
+The basic usage is
 ```bash
 tausplit.exe {time} {input_file}
 ```
-or
+if the Windows executable was downloaded, or 
 ```bash
 tausplit {time} {input_file}
 ```
-to simulate the chemical reaction network specified in the input file for the specified time period,
+if the Linux executable was downloaded, or if the program was downloaded using `cargo install tausplit`.
+Future examples will use the Linux syntax.
+
+The command simulates the chemical reaction network specified in the input file for the specified time period,
 and output a TSV containing the initial and final states of the system.
+The TSV has one column for the sample time and one column for each molecular species, and one row for each sampled time point.
+Every cell contains the number of molecules from the given molecular species at the sampled time.
 
+### Example files
 
-To compile the source code, first install the Rust programming language, which can be installed from the [official website](https://rust-lang.org/).
-After Rust is installed, the Tau-Split algorithm can be installed by typing `cargo install tausplit` in the command line, or by cloning the repository and running `cargo install --path .` in the repository directory.
+Example files for chemical reaction networks can be found in the `data/test_models` directory of the GitHub repository.
+More examples for chemical reaction networks, including the B-cell receptor network and the FceRI network, can be downloaded from `https://www.cosbi.eu/prototypes/rssa`, under "Collection of models".
 
-Afterwards, it can be used from the command line using
-```bash
-tausplit {time} {input_file}
+If the example file `synthesis.txt` is placed in the same directory as the `tausplit` executable, the progress of the network over a period of 5 seconds can be simulated using 
+```
+tausplit 5 synthesis.txt
 ```
 
 ## Options
@@ -80,3 +90,4 @@ Rows of the format `A + B -> C + 3D, 3.5` define the chemical reaction in which 
 The reaction network can be split across any number of files, allowing using the same chemical reaction network with different initial states.
 
 Lines starting with `#` are treated as comments, and are not parsed.
+
