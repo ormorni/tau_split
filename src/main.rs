@@ -1,7 +1,7 @@
 use std::{path::PathBuf, time::SystemTime};
 
 use clap::{command, Parser};
-use tausplit::{Algorithm, TauSplit5, TauSplit6, Gillespie, ParseState, SimulationAlg};
+use tausplit::{Algorithm, Gillespie, ParseState, Reaction, SimulationAlg, TauSplit5, TauSplit6};
 
 use itertools::Itertools;
 use rand::{rng, rngs::SmallRng, Rng, SeedableRng};
@@ -66,26 +66,19 @@ struct Cli {
     seed: Option<u64>,
 }
 
-fn run_with_alg<Alg: SimulationAlg>(args: Cli) {
+fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reactions: Vec<Reaction>, names: Vec<String>) {
     let rng = &mut if let Some(seed) = args.seed {
         SmallRng::seed_from_u64(seed)
     } else {
         SmallRng::seed_from_u64(rng().random())
     };
 
-    let mut parse_state = ParseState::default();
-    for path in args.data {
-        parse_state.parse_data_file(&path);
-    }
-
-    let (initial_state, reactions, names) = parse_state.get_network();
-
-    let time = args.time;
     let start_time = SystemTime::now();
+    let time = args.time;
     let sample_count = args.samples.unwrap_or(1);
     let mut samples = Vec::new();
     samples.push((initial_state.clone(), 0, 0.));
-
+    
     let mut alg = Alg::new(
         initial_state.iter().map(|x| *x as i64).collect_vec(),
         reactions.clone(),
@@ -132,10 +125,50 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli) {
 }
 
 fn run_cli(args: Cli) {
+    
+    let mut parse_state = ParseState::default();
+    for path in &args.data {
+        parse_state.parse_data_file(path);
+    }
+
+    let (initial_state, reactions, names) = parse_state.get_network();
+
     match args.algorithm {
-        Some(Algorithm::Gillespie) => run_with_alg::<Gillespie>(args),
-        Some(Algorithm::TauSplit6) => run_with_alg::<TauSplit6>(args),
-        None | Some(Algorithm::TauSplit) => run_with_alg::<TauSplit5>(args),
+        Some(Algorithm::Gillespie) => run_with_alg::<Gillespie>(args, initial_state, reactions, names),
+        Some(Algorithm::TauSplit6) => run_with_alg::<TauSplit6>(args, initial_state, reactions, names),
+        Some(Algorithm::TauSplit) => {
+            for reaction in &reactions {
+                println!("{}", reaction.format_pretty(&names));
+            }
+
+            if let Some(bad_reaction) = reactions.iter().find(|r|r.inputs.len() > TauSplit5::MAX_INPUTS) {
+                panic!(
+                    "Unable to run the optimized Tau-Splitting algorithm!
+                    The maximal number of input reactants is {}, and the reaction {} has {}! Please use the Tau-Split6 algorithm instead.",
+                    TauSplit5::MAX_INPUTS,
+                    bad_reaction.format_pretty(&names),
+                    bad_reaction.inputs.len()
+                );
+            }
+            if let Some(bad_reaction) = reactions.iter().find(|r|r.stoichiometry.len() > TauSplit5::MAX_STOI) {
+                panic!(
+                    "Unable to run the optimized Tau-Splitting algorithm! The maximal number of molecular species in the stoichiometry vector is {}, and the reaction {} has {}! Please use the Tau-Split6 algorithm instead.",
+                    TauSplit5::MAX_STOI,
+                    bad_reaction.format_pretty(&names),
+                    bad_reaction.stoichiometry.len()
+                );
+            }
+
+            run_with_alg::<TauSplit5>(args, initial_state, reactions, names)
+        }
+        None => {
+            // Choosing the algorithm automatically.
+            if reactions.iter().any(|r|r.inputs.len() > TauSplit5::MAX_INPUTS || r.stoichiometry.len() > TauSplit5::MAX_STOI) {
+                run_with_alg::<TauSplit6>(args, initial_state, reactions, names)
+            } else {
+                run_with_alg::<TauSplit5>(args, initial_state, reactions, names)
+            }
+        }
     }
 }
 

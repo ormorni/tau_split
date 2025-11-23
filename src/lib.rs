@@ -31,12 +31,11 @@ pub trait SimulationAlg {
 }
 
 /// The algorithms available in the package.
-#[derive(Default, Debug, Clone, Copy, clap::ValueEnum)]
+#[derive(Debug, Clone, Copy, clap::ValueEnum)]
 pub enum Algorithm {
     /// The Gillespie algorithm.
     Gillespie,
     /// The optimized Tau-Splitting algorithm.
-    #[default]
     TauSplit,
     /// The version of the Tau-Splitting algorithm described in the manuscript, with no furhter optimizations.
     TauSplit6,

@@ -3,7 +3,7 @@ use std::ops::{Index, IndexMut};
 use derive_new::new;
 use tinyvec::ArrayVec;
 
-use crate::reaction::{binomial, Reaction};
+use crate::{TauSplit5, reaction::{Reaction, binomial}};
 
 use super::reaction_data::{ReactionData, StableReactionData};
 
@@ -26,13 +26,13 @@ pub(crate) struct Input {
 pub(super) struct FReaction {
     /// The inputs to the reaction.
     /// An array of tuples of (reactant_idx, reactant_count, )
-    pub inputs: ArrayVec<[Input; 2]>,
+    pub inputs: ArrayVec<[Input; TauSplit5::MAX_INPUTS]>,
     /// The change to the reaction state for every firing of the reaction.
-    pub stoichiometry: ArrayVec<[(usize, i64); 4]>,
+    pub stoichiometry: ArrayVec<[(usize, i64); TauSplit5::MAX_STOI]>,
     /// The change to the reaction state for every firing of the reaction.
-    pub positive_stoichiometry: ArrayVec<[(usize, i64); 4]>,
+    pub positive_stoichiometry: ArrayVec<[(usize, i64); TauSplit5::MAX_STOI]>,
     /// The change to the reaction state for every firing of the reaction.
-    pub negative_stoichiometry: ArrayVec<[(usize, i64); 4]>,
+    pub negative_stoichiometry: ArrayVec<[(usize, i64); TauSplit5::MAX_STOI]>,
     /// The rate constant of the reaction.
     pub rate: f64,
 }
@@ -75,9 +75,9 @@ impl From<Reaction> for FReaction {
                     )
                 })
                 .collect(),
-            stoichiometry: value.stoichiometry,
-            positive_stoichiometry: value.positive_stoichiometry,
-            negative_stoichiometry: value.negative_stoichiometry,
+            stoichiometry: value.stoichiometry.into_iter().collect(),
+            positive_stoichiometry: value.positive_stoichiometry.into_iter().collect(),
+            negative_stoichiometry: value.negative_stoichiometry.into_iter().collect(),
             rate: value.rate,
         }
     }

@@ -1,9 +1,9 @@
 use std::ops::{Index, IndexMut};
 
 use derive_new::new;
-use tinyvec::ArrayVec;
+use smallvec::SmallVec;
 
-use crate::reaction::{binomial, Reaction};
+use crate::reaction::{MAX_INPUTS, MAX_STOI, Reaction, binomial};
 
 use super::reaction_data::{ReactionData};
 
@@ -26,13 +26,13 @@ pub(crate) struct Input {
 pub(super) struct FReaction {
     /// The inputs to the reaction.
     /// An array of tuples of (reactant_idx, reactant_count, )
-    pub inputs: ArrayVec<[Input; 2]>,
+    pub inputs: SmallVec<[Input; MAX_INPUTS]>,
     /// The change to the reaction state for every firing of the reaction.
-    pub stoichiometry: ArrayVec<[(usize, i64); 4]>,
+    pub stoichiometry: SmallVec<[(usize, i64); MAX_STOI]>,
     /// The change to the reaction state for every firing of the reaction.
-    pub positive_stoichiometry: ArrayVec<[(usize, i64); 4]>,
+    pub positive_stoichiometry: SmallVec<[(usize, i64); MAX_STOI]>,
     /// The change to the reaction state for every firing of the reaction.
-    pub negative_stoichiometry: ArrayVec<[(usize, i64); 4]>,
+    pub negative_stoichiometry: SmallVec<[(usize, i64); MAX_STOI]>,
     /// The rate constant of the reaction.
     pub rate: f64,
 }

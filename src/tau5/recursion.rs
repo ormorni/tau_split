@@ -1005,7 +1005,7 @@ impl<'t> RecursionTree<'t> {
                 }
             }
         } else {
-            panic!("Reaction {reaction:?} not supported!");
+            panic!("The Tau-Split5 algorithm is optimized for reactions with up to two reactants. Please use an algorithm such as Tau-Split6 instead if you need reactions with many reactants.");
         }
     }
 

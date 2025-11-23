@@ -267,7 +267,7 @@ impl<'t> RecursionTree<'t> {
                     // Since the reaction has become unstable, 
                     // if it depends on any reaction that has events we have to split it.
                     // We first check if the component was stable before, since otherwise there's no harm in it.
-                    for comp in reaction.inputs {
+                    for comp in &reaction.inputs {
                         if self.unstable_dependents[comp.index] == 0 {
                             while let Some(reaction_idx) = self.inactive_by_output[comp.index].pop() {
                                 self.full_split(reaction_idx, depth, true, rng);

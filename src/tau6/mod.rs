@@ -23,6 +23,15 @@ pub struct TauSplit6 {
     reactant_names: Vec<String>,
 }
 
+impl TauSplit6 {
+    /// The maximal number of inputs in a standard reaction. 
+    /// Reactions with more inputs will require allocation.
+    pub const MAX_INPUTS: usize = 2;
+    /// The maximal number of molecular species in the stoichiometry vector of a standard reaction. 
+    /// Reactions with more species will require allocation.
+    pub const MAX_STOI: usize = 4;
+}
+
 impl SimulationAlg for TauSplit6 {
     fn new(
         state: Vec<i64>,

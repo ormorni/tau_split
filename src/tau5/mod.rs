@@ -36,6 +36,13 @@ pub struct TauSplit5 {
     reactant_names: Vec<String>,
 }
 
+impl TauSplit5 {
+    /// The maximal number of input reactants.
+    pub const MAX_INPUTS: usize = 2;
+    /// The maximal number of components in the stoichiometry vector.
+    pub const MAX_STOI: usize = 4;
+}
+
 impl SimulationAlg for TauSplit5 {
     fn new(
         state: Vec<i64>,

@@ -1,4 +1,4 @@
-use crate::reaction::Reaction;
+use crate::reaction::{Reaction};
 use derive_new::new;
 use itertools::Itertools;
 use nom::{
@@ -13,6 +13,7 @@ use nom::{
 };
 use num_traits::Zero;
 use rustc_hash::FxHashMap;
+use smallvec::SmallVec;
 use std::{
     fs::File,
     io::{BufRead, BufReader},
@@ -128,7 +129,8 @@ fn named_to_reaction(
     named_reaction: NamedReaction,
     reactant_names: &FxHashMap<String, usize>,
 ) -> Reaction {
-    let mut inputs = ArrayVec::new();
+    let mut inputs = SmallVec::new();
+    
     for (comp, count) in &named_reaction.inputs {
         let comp = *reactant_names.get(comp).unwrap_or_else(||panic!("Failed to parse the reaction: \"{named_reaction:?}\": The reactant \"{comp:?}\" is undefined!"));
         if inputs
@@ -153,7 +155,7 @@ fn named_to_reaction(
     // Computing an iterator over the differences, and merging it to a single stoichiometry vector.
     let in_diff = inputs.iter().map(|(idx, count)| (*idx, -(*count as i64)));
     let all_diff = in_diff.chain(outputs.into_iter()).sorted();
-    let mut stoichiometry: ArrayVec<[(usize, i64); 4]> = ArrayVec::new();
+    let mut stoichiometry: SmallVec<[(usize, i64); 4]> = SmallVec::new();
     for (idx, diff) in all_diff {
         if stoichiometry.is_empty() || stoichiometry.last().unwrap().0 < idx {
             stoichiometry.push((idx, diff));
@@ -161,6 +163,7 @@ fn named_to_reaction(
             stoichiometry.last_mut().unwrap().1 += diff;
         }
     }
+
     let stoichiometry = stoichiometry
         .iter()
         .filter(|(_, diff)| !diff.is_zero())
