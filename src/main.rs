@@ -64,6 +64,9 @@ struct Cli {
     /// The seed to use for random number generation.
     #[arg(long)]
     seed: Option<u64>,
+
+    #[arg(long)]
+    repeat: Option<u64>,
 }
 
 fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reactions: Vec<Reaction>, names: Vec<String>) {
@@ -73,54 +76,71 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
         SmallRng::seed_from_u64(rng().random())
     };
 
-    let start_time = SystemTime::now();
-    let time = args.time;
-    let sample_count = args.samples.unwrap_or(1);
-    let mut samples = Vec::new();
-    samples.push((initial_state.clone(), 0, 0.));
-    
-    let mut alg = Alg::new(
-        initial_state.iter().map(|x| *x as i64).collect_vec(),
-        reactions.clone(),
-        names.clone(),
-    );
-    for _ in 0..sample_count {
-        alg.advance(time / sample_count as f64, rng);
-        samples.push((
-            alg.state().to_owned(),
-            alg.total_reactions(),
-            start_time.elapsed().unwrap().as_secs_f32(),
-        ));
-    }
 
-    // Printing the sampled states to stdout, to be redirected as desired.
-    print!("time");
-    if !args.no_print_state {
-        for name in names {
-            print!("\t{name}");
+    let run_count = args.repeat.unwrap_or(1);
+
+    for run_idx in 0..run_count {
+        let start_time = SystemTime::now();
+        let time = args.time;
+        let sample_count = args.samples.unwrap_or(1);
+        let mut samples = Vec::new();
+        samples.push((initial_state.clone(), 0, 0.));
+        
+        let mut alg = Alg::new(
+            initial_state.iter().map(|x| *x as i64).collect_vec(),
+            reactions.clone(),
+            names.clone(),
+        );
+        for _ in 0..sample_count {
+            alg.advance(time / sample_count as f64, rng);
+            samples.push((
+                alg.state().to_owned(),
+                alg.total_reactions(),
+                start_time.elapsed().unwrap().as_secs_f32(),
+            ));
         }
-    }
-    if args.count_reactions {
-        print!("\treaction_count");
-    }
-    if args.cpu_time {
-        print!("\tcpu_time");
-    }
-    println!();
-    for (idx, (state, total_reactions, cpu_time)) in samples.into_iter().enumerate() {
-        print!("{}", idx as f64 / sample_count as f64 * time);
-        if !args.no_print_state {
-            for count in state {
-                print!("\t{count}");
+    
+        // Printing the sampled states to stdout, to be redirected as desired.
+
+        // We print the header only once when we have several repeated runs.
+        if run_idx == 0 {
+            print!("time");
+            if !args.no_print_state {
+                for name in &names {
+                    print!("\t{name}");
+                }
             }
+            if args.count_reactions {
+                print!("\treaction_count");
+            }
+            if args.cpu_time {
+                print!("\tcpu_time");
+            }
+            if args.repeat.is_some() {
+                print!("\trun_idx");
+            }
+            println!();
         }
-        if args.count_reactions {
-            print!("\t{total_reactions}");
+    
+    
+        for (idx, (state, total_reactions, cpu_time)) in samples.into_iter().enumerate() {
+            print!("{}", idx as f64 / sample_count as f64 * time);
+            if !args.no_print_state {
+                for count in state {
+                    print!("\t{count}");
+                }
+            }
+            if args.count_reactions {
+                print!("\t{total_reactions}");
+            }
+            if args.cpu_time {
+                print!("\t{cpu_time:.3}")
+            }
+            if args.repeat.is_some() {
+                print!("\t{run_idx}");
+            }
+            println!();
         }
-        if args.cpu_time {
-            print!("\t{cpu_time:.3}")
-        }
-        println!();
     }
 }
 
