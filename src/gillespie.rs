@@ -82,14 +82,14 @@ pub struct Gillespie {
 impl Gillespie {
     /// Advances the state and returns the amount of time that has passed.
     pub fn sample_reaction(&mut self, max_time: f64, rng: &mut impl Rng) -> f64 {
+        if self.tree.total() <= 1e-9 {
+            return max_time;
+        }
         let time = rng.sample(Exp::new(self.tree.total()).unwrap());
         if time > max_time {
             // If the time until the next reaction is greater than the remaining time in the simulation,
             // no reaction occurs.
             return max_time;
-        }
-        if self.tree.total() <= 1e-9 {
-            return f64::MAX;
         }
         let reaction_idx = self.tree.sample(rng);
 
