@@ -66,7 +66,7 @@ struct Cli {
     seed: Option<u64>,
 
     #[arg(long)]
-    repeat: Option<u64>,
+    repeats: Option<u64>,
 }
 
 fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reactions: Vec<Reaction>, names: Vec<String>) {
@@ -77,7 +77,7 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
     };
 
 
-    let run_count = args.repeat.unwrap_or(1);
+    let run_count = args.repeats.unwrap_or(1);
 
     for run_idx in 0..run_count {
         let start_time = SystemTime::now();
@@ -116,7 +116,7 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
             if args.cpu_time {
                 print!("\tcpu_time");
             }
-            if args.repeat.is_some() {
+            if args.repeats.is_some() {
                 print!("\trun_idx");
             }
             println!();
@@ -136,7 +136,7 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
             if args.cpu_time {
                 print!("\t{cpu_time:.3}")
             }
-            if args.repeat.is_some() {
+            if args.repeats.is_some() {
                 print!("\t{run_idx}");
             }
             println!();
