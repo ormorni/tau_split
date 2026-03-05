@@ -1,6 +1,6 @@
 use std::{path::PathBuf, time::SystemTime};
 
-use clap::{command, Parser};
+use clap::Parser;
 use tausplit::{Algorithm, Gillespie, ParseState, Reaction, SimulationAlg, TauSplit5, TauSplit6};
 
 use itertools::Itertools;
@@ -69,13 +69,17 @@ struct Cli {
     repeats: Option<u64>,
 }
 
-fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reactions: Vec<Reaction>, names: Vec<String>) {
+fn run_with_alg<Alg: SimulationAlg>(
+    args: Cli,
+    initial_state: Vec<i64>,
+    reactions: Vec<Reaction>,
+    names: Vec<String>,
+) {
     let rng = &mut if let Some(seed) = args.seed {
         SmallRng::seed_from_u64(seed)
     } else {
         SmallRng::seed_from_u64(rng().random())
     };
-
 
     let run_count = args.repeats.unwrap_or(1);
 
@@ -85,7 +89,7 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
         let sample_count = args.samples.unwrap_or(1);
         let mut samples = Vec::new();
         samples.push((initial_state.clone(), 0, 0.));
-        
+
         let mut alg = Alg::new(
             initial_state.iter().map(|x| *x as i64).collect_vec(),
             reactions.clone(),
@@ -99,7 +103,7 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
                 start_time.elapsed().unwrap().as_secs_f32(),
             ));
         }
-    
+
         // Printing the sampled states to stdout, to be redirected as desired.
 
         // We print the header only once when we have several repeated runs.
@@ -121,8 +125,7 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
             }
             println!();
         }
-    
-    
+
         for (idx, (state, total_reactions, cpu_time)) in samples.into_iter().enumerate() {
             print!("{}", idx as f64 / sample_count as f64 * time);
             if !args.no_print_state {
@@ -145,7 +148,6 @@ fn run_with_alg<Alg: SimulationAlg>(args: Cli, initial_state: Vec<i64>, reaction
 }
 
 fn run_cli(args: Cli) {
-    
     let mut parse_state = ParseState::default();
     for path in &args.data {
         parse_state.parse_data_file(path);
@@ -154,14 +156,21 @@ fn run_cli(args: Cli) {
     let (initial_state, reactions, names) = parse_state.get_network();
 
     match args.algorithm {
-        Some(Algorithm::Gillespie) => run_with_alg::<Gillespie>(args, initial_state, reactions, names),
-        Some(Algorithm::TauSplit6) => run_with_alg::<TauSplit6>(args, initial_state, reactions, names),
+        Some(Algorithm::Gillespie) => {
+            run_with_alg::<Gillespie>(args, initial_state, reactions, names)
+        }
+        Some(Algorithm::TauSplit6) => {
+            run_with_alg::<TauSplit6>(args, initial_state, reactions, names)
+        }
         Some(Algorithm::TauSplit) => {
             for reaction in &reactions {
                 println!("{}", reaction.format_pretty(&names));
             }
 
-            if let Some(bad_reaction) = reactions.iter().find(|r|r.inputs.len() > TauSplit5::MAX_INPUTS) {
+            if let Some(bad_reaction) = reactions
+                .iter()
+                .find(|r| r.inputs.len() > TauSplit5::MAX_INPUTS)
+            {
                 panic!(
                     "Unable to run the optimized Tau-Splitting algorithm!
                     The maximal number of input reactants is {}, and the reaction {} has {}! Please use the Tau-Split6 algorithm instead.",
@@ -170,7 +179,10 @@ fn run_cli(args: Cli) {
                     bad_reaction.inputs.len()
                 );
             }
-            if let Some(bad_reaction) = reactions.iter().find(|r|r.stoichiometry.len() > TauSplit5::MAX_STOI) {
+            if let Some(bad_reaction) = reactions
+                .iter()
+                .find(|r| r.stoichiometry.len() > TauSplit5::MAX_STOI)
+            {
                 panic!(
                     "Unable to run the optimized Tau-Splitting algorithm! The maximal number of molecular species in the stoichiometry vector is {}, and the reaction {} has {}! Please use the Tau-Split6 algorithm instead.",
                     TauSplit5::MAX_STOI,
@@ -183,7 +195,10 @@ fn run_cli(args: Cli) {
         }
         None => {
             // Choosing the algorithm automatically.
-            if reactions.iter().any(|r|r.inputs.len() > TauSplit5::MAX_INPUTS || r.stoichiometry.len() > TauSplit5::MAX_STOI) {
+            if reactions.iter().any(|r| {
+                r.inputs.len() > TauSplit5::MAX_INPUTS
+                    || r.stoichiometry.len() > TauSplit5::MAX_STOI
+            }) {
                 run_with_alg::<TauSplit6>(args, initial_state, reactions, names)
             } else {
                 run_with_alg::<TauSplit5>(args, initial_state, reactions, names)

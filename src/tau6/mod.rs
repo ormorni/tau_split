@@ -1,5 +1,4 @@
 mod f_reaction;
-mod listener;
 mod reaction_data;
 mod recursion;
 mod state_data;
@@ -8,13 +7,11 @@ mod unstable_dependents;
 use f_reaction::FReaction;
 use itertools::Itertools;
 use rand::Rng;
-use reaction_data::{ReactionData};
+use reaction_data::ReactionData;
 use recursion::RecursionTree;
 use state_data::StateData;
 
 use crate::{reaction::Reaction, SimulationAlg};
-
-
 
 pub struct TauSplit6 {
     pub reactions: Vec<Reaction>,
@@ -24,20 +21,16 @@ pub struct TauSplit6 {
 }
 
 impl TauSplit6 {
-    /// The maximal number of inputs in a standard reaction. 
+    /// The maximal number of inputs in a standard reaction.
     /// Reactions with more inputs will require allocation.
     pub const MAX_INPUTS: usize = 2;
-    /// The maximal number of molecular species in the stoichiometry vector of a standard reaction. 
+    /// The maximal number of molecular species in the stoichiometry vector of a standard reaction.
     /// Reactions with more species will require allocation.
     pub const MAX_STOI: usize = 4;
 }
 
 impl SimulationAlg for TauSplit6 {
-    fn new(
-        state: Vec<i64>,
-        reactions: Vec<Reaction>,
-        reactant_names: Vec<String>,
-    ) -> TauSplit6 {
+    fn new(state: Vec<i64>, reactions: Vec<Reaction>, reactant_names: Vec<String>) -> TauSplit6 {
         TauSplit6 {
             state,
             reactions,
@@ -68,4 +61,3 @@ impl SimulationAlg for TauSplit6 {
         self.total_reactions
     }
 }
-
